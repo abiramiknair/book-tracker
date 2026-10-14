@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Book Tracker — your dreamy personal reading journal. Track books you want to read, are reading, and have finished." />
+  <title>Book Tracker — My Reading Journal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background decoration -->
+  <div class="bg-mesh" aria-hidden="true"></div>
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+  <div class="bg-orb orb-3" aria-hidden="true"></div>
+  <div class="sparkle sp1" aria-hidden="true"></div>
+  <div class="sparkle sp2" aria-hidden="true"></div>
+  <div class="sparkle sp3" aria-hidden="true"></div>
+  <div class="sparkle sp4" aria-hidden="true"></div>
+
+  <div class="page-wrapper">
+
+    <!-- ════ HEADER ════ -->
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <span class="logo-emoji">📚</span>
+          <div class="logo-halo"></div>
+        </div>
+        <div>
+          <h1 class="site-title">Book Tracker</h1>
+          <p class="site-subtitle">Your dreamy reading journal ✨</p>
+        </div>
+      </div>
+
+      <nav class="stats-row" aria-label="Reading statistics">
+        <div class="stat-badge"             id="statTotal"  ><span class="sb-icon">📚</span><span class="sb-num" id="numTotal"  >0</span><span class="sb-lbl">Total</span></div>
+        <div class="stat-badge badge-toread" id="statToRead" ><span class="sb-icon">📋</span><span class="sb-num" id="numToRead" >0</span><span class="sb-lbl">To Read</span></div>
+        <div class="stat-badge badge-reading" id="statReading"><span class="sb-icon">🔖</span><span class="sb-num" id="numReading">0</span><span class="sb-lbl">Reading</span></div>
+        <div class="stat-badge badge-done"   id="statDone"  ><span class="sb-icon">✅</span><span class="sb-num" id="numDone"  >0</span><span class="sb-lbl">Finished</span></div>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- ════ ADD BOOK FORM ════ -->
+      <section class="glass-card" aria-labelledby="formHeading">
+        <div class="card-top">
+          <span class="card-star" aria-hidden="true">✦</span>
+          <h2 class="card-heading" id="formHeading">Add a New Book</h2>
+        </div>
+
+        <form id="bookForm" novalidate autocomplete="off">
+          <div class="form-grid">
+
+            <div class="field" id="wrapTitle">
+              <label class="flabel" for="inputTitle">Title <span class="req">*</span></label>
+              <div class="finput-shell">
+                <span class="fprefix" aria-hidden="true">📕</span>
+                <input class="finput" type="text" id="inputTitle"
+                       placeholder="e.g. Dune"
+                       aria-required="true" aria-describedby="errTitle" />
+              </div>
+              <span class="ferr" id="errTitle" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="field" id="wrapAuthor">
+              <label class="flabel" for="inputAuthor">Author <span class="req">*</span></label>
+              <div class="finput-shell">
+                <span class="fprefix" aria-hidden="true">✍️</span>
+                <input class="finput" type="text" id="inputAuthor"
+                       placeholder="e.g. Frank Herbert"
+                       aria-required="true" aria-describedby="errAuthor" />
+              </div>
+              <span class="ferr" id="errAuthor" role="alert" aria-live="polite"></span>
+            </div>
+
+            <div class="field field--status">
+              <label class="flabel" for="inputStatus">Status</label>
+              <div class="fselect-shell">
+                <select class="finput fselect" id="inputStatus">
+                  <option value="To Read">📋 To Read</option>
+                  <option value="Reading">📖 Reading</option>
+                  <option value="Finished">✅ Finished</option>
+                </select>
+                <span class="fselect-caret" aria-hidden="true">▾</span>
+              </div>
+            </div>
+
+          </div>
+
+          <button class="btn btn-add" type="submit" id="btnAdd">
+            <span class="btn-plus" aria-hidden="true">＋</span>
+            Add Book
+          </button>
+        </form>
+      </section>
+
+      <!-- ════ SEARCH · SORT · FILTER · CLEAR ALL ════ -->
+      <section class="controls" aria-label="Search, sort and filter">
+
+        <!-- Row 1: search + sort -->
+        <div class="controls-row1">
+          <div class="search-shell">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input class="search-input" type="search" id="searchInput"
+                   placeholder="Search by title or author…"
+                   aria-label="Search books" />
+            <button class="search-x" id="btnClearSearch" aria-label="Clear search" hidden>✕</button>
+          </div>
+
+          <div class="sort-shell">
+            <label class="sort-label" for="sortSelect">Sort</label>
+            <div class="fselect-shell sort-select-shell">
+              <select class="finput fselect sort-select" id="sortSelect" aria-label="Sort books">
+                <option value="newest">🕒 Newest First</option>
+                <option value="az">🔤 Title A → Z</option>
+              </select>
+              <span class="fselect-caret" aria-hidden="true">▾</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: filter chips + reset + clear all -->
+        <div class="controls-row2">
+          <div class="fchips" role="group" aria-label="Filter by status">
+            <button class="fchip active" data-filter="All"      id="filterAll"     >All</button>
+            <button class="fchip"        data-filter="To Read"  id="filterToRead"  >📋 To Read</button>
+            <button class="fchip"        data-filter="Reading"  id="filterReading" >📖 Reading</button>
+            <button class="fchip"        data-filter="Finished" id="filterFinished">✅ Finished</button>
+          </div>
+          <div class="action-btns">
+            <button class="btn btn-reset" id="btnReset" title="Reset filters and search">↺ Reset</button>
+            <button class="btn btn-clearall" id="btnClearAll" title="Remove all books">🗑 Clear All</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════ BOOK LIST ════ -->
+      <section aria-label="Your books">
+        <div id="bookList" class="book-list"></div>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="empty-state" hidden>
+          <div class="empty-art" aria-hidden="true">
+            <svg viewBox="0 0 220 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="empty-svg">
+              <ellipse cx="110" cy="188" rx="52" ry="8" fill="url(#sg)" opacity="0.4"/>
+              <rect x="62" y="48" width="88" height="114" rx="10" fill="url(#bc)"/>
+              <rect x="68" y="42" width="82" height="114" rx="9" fill="url(#pg)"/>
+              <rect x="80" y="68" width="56" height="3" rx="1.5" fill="#c4b5fd" opacity="0.55"/>
+              <rect x="80" y="79" width="46" height="3" rx="1.5" fill="#c4b5fd" opacity="0.50"/>
+              <rect x="80" y="90" width="52" height="3" rx="1.5" fill="#c4b5fd" opacity="0.45"/>
+              <rect x="80" y="101" width="40" height="3" rx="1.5" fill="#c4b5fd" opacity="0.38"/>
+              <rect x="80" y="112" width="50" height="3" rx="1.5" fill="#c4b5fd" opacity="0.32"/>
+              <rect x="80" y="123" width="35" height="3" rx="1.5" fill="#c4b5fd" opacity="0.25"/>
+              <rect x="68" y="42" width="10" height="114" rx="4" fill="url(#sp)"/>
+              <path d="M118 42 L118 72 L110 64 L102 72 L102 42 Z" fill="url(#rb)"/>
+              <circle cx="152" cy="44" r="4.5" fill="#e879f9" class="es1"/>
+              <circle cx="57"  cy="70" r="3.5" fill="#a78bfa" class="es2"/>
+              <circle cx="162" cy="112" r="3"  fill="#818cf8" class="es3"/>
+              <circle cx="50"  cy="140" r="4"  fill="#f0abfc" class="es4"/>
+              <defs>
+                <linearGradient id="bc" x1="62" y1="48" x2="150" y2="162" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#9333ea"/>
+                  <stop offset="100%" stop-color="#5b21b6"/>
+                </linearGradient>
+                <linearGradient id="pg" x1="68" y1="42" x2="150" y2="156" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f5f3ff"/>
+                  <stop offset="100%" stop-color="#e9d5ff"/>
+                </linearGradient>
+                <linearGradient id="sp" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                  <stop offset="0%" stop-color="#7e22ce"/>
+                  <stop offset="100%" stop-color="#9333ea"/>
+                </linearGradient>
+                <linearGradient id="rb" x1="102" y1="42" x2="118" y2="72" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#f0abfc"/>
+                  <stop offset="100%" stop-color="#e879f9"/>
+                </linearGradient>
+                <radialGradient id="sg" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#9333ea" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#9333ea" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          <h3 class="empty-title" id="emptyTitle">Your shelf is empty</h3>
+          <p  class="empty-body"  id="emptyBody">Add your first book above to begin your reading journey.</p>
+          <button class="btn btn-add empty-cta" id="btnEmptyCta">＋ Add a Book</button>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <p>📚 Book Tracker — data saved in your browser</p>
+    </footer>
+  </div>
+
+  <!-- ════ TOAST STACK ════ -->
+  <div id="toastWrap" class="toast-wrap" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ════ DELETE ONE MODAL ════ -->
+  <div id="delOneModal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="delOneTitle">
+    <div class="modal-box">
+      <div class="modal-emoji" aria-hidden="true">🗑️</div>
+      <h2 class="modal-title" id="delOneTitle">Remove this book?</h2>
+      <p  class="modal-body"  id="delOneBody"></p>
+      <div class="modal-row">
+        <button class="btn btn-ghost" id="btnDelOneCancel">Cancel</button>
+        <button class="btn btn-danger" id="btnDelOneConfirm">Yes, Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ CLEAR ALL MODAL ════ -->
+  <div id="clearAllModal" class="modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="clearTitle">
+    <div class="modal-box">
+      <div class="modal-emoji" aria-hidden="true">⚠️</div>
+      <h2 class="modal-title" id="clearTitle">Clear all books?</h2>
+      <p  class="modal-body">This will permanently remove <strong id="clearCount">all</strong> books from your shelf. This cannot be undone.</p>
+      <div class="modal-row">
+        <button class="btn btn-ghost"  id="btnClearAllCancel" >Cancel</button>
+        <button class="btn btn-danger" id="btnClearAllConfirm">Yes, Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
